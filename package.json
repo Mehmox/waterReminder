@@ -1,0 +1,62 @@
+{
+  "name": "water-reminder",
+  "version": "0.1.0",
+  "main": "electron/main.js",
+  "homepage": "./",
+  "private": true,
+  "license": "MIT",
+  "author": "Mehmox",
+  "description": "An Electron app to remind you to drink water regularly.",
+  "scripts": {
+    "i": "npm run r && npm i --prefix main && npm i --prefix noti && npm i",
+    "dev": "concurrently \"node setVer.js dev && npm start --prefix main\" \"npm start --prefix noti\" \"cpy env-dev.json electron --rename=env.json --overwrite && electronmon .\"",
+    "test": "cpy env-test.json electron --rename=env.json --overwrite && electronmon .",
+    "rconfig": "electron delete.js",
+    "r": "rimraf main/node_modules noti/node_modules node_modules",
+    "rb": "rimraf main/build noti/build",
+    "build": "node setVer.js pro && npm run build --prefix main && npm run build --prefix noti && npm run predist && npm run rb",
+    "predist": "cpy \"main/build/**\" build/main/build/ && cpy \"noti/build/**\" build/noti/build/",
+    "dist": "rimraf dist/win && cross-env NODE_ENV=$npm_config_env electron-builder -c.directories.output=dist/win"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "cpy": "^11.1.0",
+    "cross-env": "^10.0.0",
+    "electron": "^35.0.3",
+    "electron-builder": "^26.0.12",
+    "electronmon": "^2.0.3"
+  },
+  "build": {
+    "appId": "com.example.waterreminder",
+    "productName": "Water-Reminder",
+    "files": [
+      "build/**/**/*",
+      "electron/**/*"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "electron/assets/water_drop.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": true,
+      "artifactName": "${productName}-Setup-${version}.${ext}"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb",
+        "rpm"
+      ],
+      "icon": "electron/assets/water_drop.png"
+    }
+  },
+  "dependencies": {
+    "winreg": "^1.2.5"
+  }
+}

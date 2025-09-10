@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "./customCss/checkbox.css";
+
+* {
+    font-family: "Roboto", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+}
+
+body {
+    user-select: none;
+    overflow: hidden;
+}
+
+body * {
+    @apply bg-primary
+}
+
+.p input::-webkit-outer-spin-button,
+.p input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+div {
+    @apply rounded-2xl
+}
+
+.number {
+    @apply w-5
+}
+
+.checkmark {
+    background-color: #ccc;
+    box-shadow: 3px 3px 5px #c5c5c5,
+        -3px -3px 5px #ffffff;
+    @apply shadow-primary-hover bg-primary-hover
+}
+
+.container input:checked~.checkmark {
+    box-shadow: inset 3px 3px 5px #c5c5c5,
+        inset -3px -3px 5px #ffffff;
+    @apply shadow-secondery
+}
