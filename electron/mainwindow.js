@@ -40,6 +40,7 @@ function createWindow() {
     }
 
     const mainwindow = new BrowserWindow(windowOptions);
+
     mainwindow.setOverlayIcon(path.join(__dirname, "assets", "settings.ico"), "test");
 
     switch (env) {
@@ -50,10 +51,11 @@ function createWindow() {
         case "test":
         // mainwindow.webContents.openDevTools();
         case "production":
-            mainwindow.loadFile(path.join(__dirname, '../build/main/build/index.html'));
+            mainwindow.loadFile(path.join(__dirname, '../builds/main/index.html'));
             break;
     }
 
     return mainwindow;
 }
+
 module.exports = createWindow;

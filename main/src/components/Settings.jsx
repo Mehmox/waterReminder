@@ -5,8 +5,10 @@ import Counter from "./Counter";
 const ENV = process.env.REACT_APP_ENV;
 
 export default function Settings() {
-    const sound = new Audio(`${ENV === "pro" ? "." : ""}/click_sound.mp3`);
-    sound.volume = 0.2;
+    const clickSound = new Audio(`${ENV === "pro" ? "." : ""}/click_sound.mp3`);
+    const notiSound = new Audio(`${ENV === "pro" ? "." : ""}/noti_sound.mp3`);
+    clickSound.volume = 0.2;
+    notiSound.volume = 0.5;
 
     const refs = {
         noti_alwaysOnTop: useRef(),
@@ -58,7 +60,7 @@ export default function Settings() {
     useEffect(itShouldWork, [counter]);
 
     function SaveConfig() {
-        sound.play();
+        clickSound.play();
 
         const config = getObjet();
 
@@ -70,7 +72,7 @@ export default function Settings() {
     }
 
     function _SetCounter(action) {
-        sound.play();
+        clickSound.play();
 
         setCounter(pre => {
             console.log(pre + action)
@@ -86,7 +88,7 @@ export default function Settings() {
     }
 
     function _ResetCounter() {
-        sound.play();
+        clickSound.play();
 
         setCounter(0);
 
@@ -153,9 +155,9 @@ export default function Settings() {
 
         <Counter config={config} counter={counter} _SetCounter={_SetCounter} _ResetCounter={_ResetCounter} />
 
-        <Timer time={time} on_off={config && (config.limit - counter > 0)} />
+        <Timer time={time} on_off={config && (config.limit - counter > 0)} sound={notiSound} />
     </div>
 
     if (!config) return <h1>Somethink went wrong...</h1>
-    return retu
+    return retu;
 }

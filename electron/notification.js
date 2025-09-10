@@ -47,10 +47,11 @@ function createNotification() {
         case "test":
             notification.webContents.openDevTools();
         case "production":
-            notification.loadFile(path.join(__dirname, '../build/noti/build/index.html'));
+            notification.loadFile(path.join(__dirname, '../builds/noti/index.html'));
             break;
     }
 
     return notification;
 }
+
 module.exports = createNotification;

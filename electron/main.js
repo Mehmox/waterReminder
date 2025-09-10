@@ -18,8 +18,6 @@ app.whenReady().then(() => {
   const mainwindow = createWindow();
   const notification = createNotification();
 
-  mainwindow.show();
-
   //file       
   if (!fs.existsSync(counter_path)) fs.writeFileSync(counter_path, "0")
 
@@ -44,37 +42,32 @@ app.whenReady().then(() => {
       });
     }
 
-    mainwindow.show();
+    mainwindow.showInactive();
   }
 
+  mainwindow.showInactive();
   notification.setAlwaysOnTop(config.alwaysOnTop);
   notification.setSkipTaskbar(config.alwaysOnTop);
 
   //listeners          
-  tray.on("click", () => mainwindow.show());
+  tray.on("click", mainwindow.showInactive);
 
   ipcMain.handleOnce("setup-main-config", () => config);
   ipcMain.handleOnce("setup-main-counter", () => parseInt(fs.readFileSync(counter_path, "utf-8")));
-  ipcMain.handle("setup-noti-config", () => config);
+  ipcMain.handleOnce("setup-noti-config", () => config);
 
+  ipcMain.on("hide-settings", mainwindow.hide);
+  ipcMain.on("show-noti", () => notification.showInactive);
 
-  ipcMain.on("hide-settings", () => mainwindow.hide());
-  ipcMain.on("show-noti", () => {
-    console.log("show inactive");
-    notification.showInactive();
-    console.log(notification.isFocused());
-  });
-
-
-  ipcMain.on("save-config", (event, config) => {
+  ipcMain.on("save-config", (event, newConfig) => {
     notification.hide();
-    console.log(config.alwaysOnTop)
-    notification.setAlwaysOnTop(config.alwaysOnTop);
-    notification.setSkipTaskbar(config.alwaysOnTop);
 
-    fs.writeFileSync(config_path, JSON.stringify(config, null, 4));
+    notification.setAlwaysOnTop(newConfig.alwaysOnTop);
+    notification.setSkipTaskbar(newConfig.alwaysOnTop);
 
-    notification.webContents.send("set-changes-from-main-to-noti", config);
+    fs.writeFileSync(config_path, JSON.stringify(newConfig, null, 4));
+
+    notification.webContents.send("set-changes-from-main-to-noti", newConfig);
   });
 
   ipcMain.on("save-counter", (event, value) => {
@@ -83,11 +76,11 @@ app.whenReady().then(() => {
     fs.writeFileSync(counter_path, value.toString());
   });
 
-  ipcMain.on("hide-noti", async () => {
+  ipcMain.on("hide-noti", () => {
     notification.hide();
 
     let current = parseInt(fs.readFileSync(counter_path, "utf8"));
-    current++
+    current++;
 
     fs.writeFileSync(counter_path, current.toString());
 

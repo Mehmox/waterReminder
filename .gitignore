@@ -1,5 +1,5 @@
 node_modules
-delete.js
-build
-dist
 .others
+builds
+dist
+helpers

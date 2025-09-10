@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 
 function format(time) {
     function check(time) {
@@ -16,7 +16,7 @@ function format(time) {
     return `${check(hour)}:${check(minute)}:${check(time)}`
 }
 
-export default function Timer({ time, on_off }) {
+export default function Timer({ time, on_off, sound }) {
     const [countDown, setCountdown] = useState();
 
     useEffect(() => {
@@ -30,9 +30,10 @@ export default function Timer({ time, on_off }) {
                     if (pre - 1 < 1) {
                         clearInterval(Interval)
                         window.Electron && window.Electron.showNoti();
+                        sound.play();
                         return 0
                     }
-                    return pre - 1
+                    return pre - 1;
                 })
             }, 1000);
             return () => clearInterval(Interval)
