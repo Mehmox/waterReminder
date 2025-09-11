@@ -2,11 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import Input from "./Input";
 import Timer from "./Timer";
 import Counter from "./Counter";
-const ENV = process.env.REACT_APP_ENV;
 
 export default function Settings() {
-    const clickSound = new Audio(`${ENV === "pro" ? "." : ""}/click_sound.mp3`);
-    const notiSound = new Audio(`${ENV === "pro" ? "." : ""}/noti_sound.mp3`);
+    const clickSound = new Audio(`assets/click_sound.mp3`);
+    const notiSound = new Audio(`assets/noti_sound.mp3`);
     clickSound.volume = 0.2;
     notiSound.volume = 0.5;
 

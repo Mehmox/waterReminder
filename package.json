@@ -9,18 +9,17 @@
   "description": "An Electron app to remind you to drink water regularly.",
   "scripts": {
     "i": "npm run r && npm i --prefix main && npm i --prefix noti && npm i",
-
-    "dev": "concurrently \"node main/setVer.js dev && npm start --prefix main\" \"npm start --prefix noti\" \"cpy env-dev.json electron --rename=env.json --overwrite && electronmon .\"",
-    "test": "cpy env-test.json electron --rename=env.json --overwrite && electronmon .",
     
     "rconfig": "electron delete.js",
     "r": "rimraf main/node_modules noti/node_modules node_modules",
 
-    "rb": "rimraf main/build noti/build",
-    "build": "node main/setVer.js pro && npm run build --prefix main && npm run build --prefix noti",
-    "postbuild": "cpy \"main/build/**\" builds/main/ && cpy \"noti/build/**\" builds/noti/ && npm run rb",
+    "dev": "concurrently \"node main/setVer.js && npm start --prefix main\" \"npm start --prefix noti\" \"cross-env NODE_ENV=development electronmon .\"",
+    "test": "cross-env NODE_ENV=test electronmon .",
 
-    "dist": "rimraf dist/win && cross-env NODE_ENV=$npm_config_env electron-builder -c.directories.output=dist/win"
+    "rb": "rimraf main/build noti/build",
+    "build": "node main/setVer.js && npm run build --prefix main && npm run build --prefix noti",
+    "postbuild": "cpy \"main/build/**\" builds/main/ && cpy \"noti/build/**\" builds/noti/ && npm run rb",
+    "dist": "rimraf dist/win && electron-builder"
   },
   "devDependencies": {
     "concurrently": "^9.1.2",
@@ -33,12 +32,17 @@
   "build": {
     "appId": "com.example.waterreminder",
     "productName": "Water-Reminder",
+    "extraMetadata": {
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
     "files": [
       "builds/**/*",
       "electron/**/*"
     ],
     "directories": {
-      "output": "dist"
+      "output": "dist/win"
     },
     "win": {
       "target": "nsis",

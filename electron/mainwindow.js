@@ -1,14 +1,13 @@
 const { BrowserWindow } = require('electron');
 const path = require('path');
-const env = require("./env.json").env;
 
-function createWindow() {
+function createWindow(ENV) {
 
     const windowOptions = {
         width: 450,
         height: 540,
         icon: path.join(__dirname, "assets", "water_drop.ico"),
-        alwaysOnTop : false,
+        alwaysOnTop: false,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: true,
@@ -21,7 +20,7 @@ function createWindow() {
         show: false,
     }
 
-    switch (env) {
+    switch (ENV) {
         case "development":
             windowOptions.width += 252;//to devTools
             windowOptions.height += 57;//to avoid window frame pixels
@@ -37,13 +36,15 @@ function createWindow() {
             windowOptions.transparent = false;
             windowOptions.show = true;
             break;
+        default:
+            break;
     }
 
     const mainwindow = new BrowserWindow(windowOptions);
 
-    mainwindow.setOverlayIcon(path.join(__dirname, "assets", "settings.ico"), "test");
+    mainwindow.setOverlayIcon(path.join(__dirname, "assets", "settings.ico"), "development");
 
-    switch (env) {
+    switch (ENV) {
         case "development":
             // mainwindow.webContents.openDevTools();
             mainwindow.loadURL("http://localhost:3000");

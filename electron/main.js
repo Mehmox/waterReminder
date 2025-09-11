@@ -2,7 +2,8 @@ const { app, ipcMain } = require('electron');
 const winreg = require("winreg");
 const fs = require("fs");
 const path = require('path');
-const ENV = require("./env.json").env;
+const ENV = process.env.NODE_ENV|| require('../package.json').env.NODE_ENV;
+console.log(`NODE_ENV: ${ENV}`);
 
 const createTray = require("./tray");
 const createWindow = require("./mainwindow");
@@ -10,22 +11,22 @@ const createNotification = require("./notification");
 
 const config_path = path.join(app.getPath("userData"), "config.json");
 const counter_path = path.join(app.getPath("userData"), "counter.txt");
-let Logs = { ENV, getPath: app.getPath("exe"), isPacked: app.isPackaged };
+const Logs = { getPath: app.getPath("exe"), isPacked: app.isPackaged };
 
 app.whenReady().then(() => {
   //create          
-  const tray = createTray(ENV === "production" ? path.join(__dirname, "assets", "water_drop.ico") : undefined);
-  const mainwindow = createWindow();
-  const notification = createNotification();
+  const tray = createTray(ENV);
+  const mainwindow = createWindow(ENV);
+  const notification = createNotification(ENV);
 
   //file       
   if (!fs.existsSync(counter_path)) fs.writeFileSync(counter_path, "0")
 
-  let config
+  let config;
   if (fs.existsSync(config_path))
     config = JSON.parse(fs.readFileSync(config_path, "utf-8"))
   else {
-    config = { alwaysOnTop: false, limit: 0, cup: 0, cooldown: 0, timeType: 1000, message: "" }
+    config = { alwaysOnTop: false, limit: 0, cup: 0, cooldown: 0, timeType: 1000, message: "" };
 
     fs.writeFileSync(config_path, JSON.stringify(config, null, 4));
 
@@ -41,29 +42,25 @@ app.whenReady().then(() => {
         getAppInfo();
       });
     }
-
-    mainwindow.showInactive();
   }
 
-  mainwindow.showInactive();
   notification.setAlwaysOnTop(config.alwaysOnTop);
-  notification.setSkipTaskbar(config.alwaysOnTop);
+  mainwindow.showInactive();
 
   //listeners          
-  tray.on("click", mainwindow.showInactive);
+  tray.on("click", () => mainwindow.showInactive());
 
   ipcMain.handleOnce("setup-main-config", () => config);
   ipcMain.handleOnce("setup-main-counter", () => parseInt(fs.readFileSync(counter_path, "utf-8")));
   ipcMain.handleOnce("setup-noti-config", () => config);
 
-  ipcMain.on("hide-settings", mainwindow.hide);
-  ipcMain.on("show-noti", () => notification.showInactive);
+  ipcMain.on("hide-settings", () => mainwindow.hide());
+  ipcMain.on("show-noti", () => notification.showInactive());
 
   ipcMain.on("save-config", (event, newConfig) => {
     notification.hide();
 
     notification.setAlwaysOnTop(newConfig.alwaysOnTop);
-    notification.setSkipTaskbar(newConfig.alwaysOnTop);
 
     fs.writeFileSync(config_path, JSON.stringify(newConfig, null, 4));
 
@@ -80,6 +77,7 @@ app.whenReady().then(() => {
     notification.hide();
 
     let current = parseInt(fs.readFileSync(counter_path, "utf8"));
+
     current++;
 
     fs.writeFileSync(counter_path, current.toString());
@@ -93,13 +91,13 @@ app.whenReady().then(() => {
 
 function getAppInfo() {
   const targetPath = path.join(app.getPath("userData"), "SystemLogs.json");
+
   let SystemLogs = {};
 
-  if (fs.existsSync(targetPath)) {
-    SystemLogs = JSON.parse(fs.readFileSync(targetPath, "utf-8"));
-  }
+  if (fs.existsSync(targetPath)) SystemLogs = JSON.parse(fs.readFileSync(targetPath, "utf-8"));
 
   SystemLogs[ENV] = Logs;
+  SystemLogs[ENV].date = new Date().toLocaleTimeString("tr-TR");
 
   fs.writeFileSync(targetPath, JSON.stringify(SystemLogs, null, 4));
 }

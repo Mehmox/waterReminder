@@ -1,8 +1,7 @@
 const { BrowserWindow, screen } = require('electron');
 const path = require('path');
-const env = require("./env.json").env;
 
-function createNotification() {
+function createNotification(ENV) {
     const primaryDisplay = screen.getPrimaryDisplay();
 
     const windowOptions = {
@@ -22,7 +21,7 @@ function createNotification() {
         show: false,
     }
 
-    switch (env) {
+    switch (ENV) {
         case "development":
             windowOptions.resizable = true;
             windowOptions.frame = false;
@@ -33,19 +32,19 @@ function createNotification() {
         case "test":
             // windowOptions.show = true;
             break;
+        default:
+            break;
     }
 
     const notification = new BrowserWindow(windowOptions);
 
-    notification.setSkipTaskbar(true);
-
-    switch (env) {
+    switch (ENV) {
         case "development":
             // notification.webContents.openDevTools();
             notification.loadURL("http://localhost:3005");
             break;
         case "test":
-            notification.webContents.openDevTools();
+            // notification.webContents.openDevTools();
         case "production":
             notification.loadFile(path.join(__dirname, '../builds/noti/index.html'));
             break;

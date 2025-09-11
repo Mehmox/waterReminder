@@ -1,4 +1,4 @@
-import Button from "./Button.jsx"
+import Button from "./Button.jsx";
 
 export default function Counter({ config, counter, _SetCounter, _ResetCounter }) {
 
