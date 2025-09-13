@@ -1,8 +1,8 @@
-const { app, ipcMain } = require('electron');
+const { app, ipcMain, screen } = require('electron');
 const winreg = require("winreg");
 const fs = require("fs");
 const path = require('path');
-const ENV = process.env.NODE_ENV|| require('../package.json').env.NODE_ENV;
+const ENV = process.env.NODE_ENV || require('../package.json').env.NODE_ENV;
 console.log(`NODE_ENV: ${ENV}`);
 
 const createTray = require("./tray");
@@ -14,19 +14,20 @@ const counter_path = path.join(app.getPath("userData"), "counter.txt");
 const Logs = { getPath: app.getPath("exe"), isPacked: app.isPackaged };
 
 app.whenReady().then(() => {
-  //create          
-  const tray = createTray(ENV);
-  const mainwindow = createWindow(ENV);
-  const notification = createNotification(ENV);
+
+  const primaryDisplay = screen.getPrimaryDisplay();
+
+  const mainWidth = 450, mainHeight = 540;
 
   //file       
   if (!fs.existsSync(counter_path)) fs.writeFileSync(counter_path, "0")
-
   let config;
   if (fs.existsSync(config_path))
     config = JSON.parse(fs.readFileSync(config_path, "utf-8"))
   else {
-    config = { alwaysOnTop: false, limit: 0, cup: 0, cooldown: 0, timeType: 1000, message: "" };
+    let x = primaryDisplay.workAreaSize.width / 2 - mainWidth/2, y = primaryDisplay.workAreaSize.height / 2 - mainHeight/2;
+
+    config = { alwaysOnTop: false, limit: 0, cup: 0, cooldown: 0, timeType: 1000, message: "", x, y };
 
     fs.writeFileSync(config_path, JSON.stringify(config, null, 4));
 
@@ -44,6 +45,12 @@ app.whenReady().then(() => {
     }
   }
 
+  //create          
+  const tray = createTray(ENV);
+  const mainwindow = createWindow(ENV, mainWidth, mainHeight);
+  const notification = createNotification(ENV, primaryDisplay.workAreaSize.width, primaryDisplay.workAreaSize.height);
+
+  mainwindow.setBounds({ x: config.x, y: config.y });
   notification.setAlwaysOnTop(config.alwaysOnTop);
   mainwindow.showInactive();
 
@@ -58,14 +65,18 @@ app.whenReady().then(() => {
   ipcMain.on("hide-settings", () => mainwindow.hide());
   ipcMain.on("show-noti", () => notification.showInactive());
 
-  ipcMain.on("save-config", (event, newConfig) => {
+  ipcMain.on("save-config", (_, newConfigObject) => {
     notification.hide();
 
-    notification.setAlwaysOnTop(newConfig.alwaysOnTop);
+    for (const configKey in newConfigObject) {
+      config[configKey] = newConfigObject[configKey];
+    }
 
-    fs.writeFileSync(config_path, JSON.stringify(newConfig, null, 4));
+    notification.setAlwaysOnTop(config.alwaysOnTop);
 
-    notification.webContents.send("set-changes-from-main-to-noti", newConfig);
+    fs.writeFileSync(config_path, JSON.stringify(config, null, 4));
+
+    notification.webContents.send("set-changes-from-main-to-noti", config);
   });
 
   ipcMain.on("save-counter", (event, value) => {
@@ -84,6 +95,13 @@ app.whenReady().then(() => {
     fs.writeFileSync(counter_path, current.toString());
 
     mainwindow.webContents.send("ping-main-counter", current);
+  });
+
+  mainwindow.on("moved", () => {
+    const { x, y } = mainwindow.getBounds();
+    config.x = x;
+    config.y = y;
+    fs.writeFileSync(config_path, JSON.stringify(config, null, 4));
   });
 
   if (ENV !== "production") getAppInfo();

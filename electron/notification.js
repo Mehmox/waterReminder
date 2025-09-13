@@ -1,14 +1,15 @@
-const { BrowserWindow, screen } = require('electron');
+const { BrowserWindow } = require('electron');
 const path = require('path');
 
-function createNotification(ENV) {
-    const primaryDisplay = screen.getPrimaryDisplay();
+const width = 400, height = 250;
+
+function createNotification(ENV, primaryWidth, primaryHeight) {
 
     const windowOptions = {
-        width: 400,
-        height: 250,
-        x: primaryDisplay.workAreaSize.width - 400 - 10,
-        y: primaryDisplay.workAreaSize.height - 250 - 15,
+        width,
+        height,
+        x: primaryWidth - width - 5,
+        y: primaryHeight - height - 5,
         alwaysOnTop: false,
         webPreferences: {
             nodeIntegration: false,
@@ -19,6 +20,7 @@ function createNotification(ENV) {
         resizable: false,
         frame: false,
         show: false,
+        maximizable: false,
     }
 
     switch (ENV) {
@@ -44,7 +46,7 @@ function createNotification(ENV) {
             notification.loadURL("http://localhost:3005");
             break;
         case "test":
-            // notification.webContents.openDevTools();
+        // notification.webContents.openDevTools();
         case "production":
             notification.loadFile(path.join(__dirname, '../builds/noti/index.html'));
             break;

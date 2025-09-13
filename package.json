@@ -10,7 +10,7 @@
   "scripts": {
     "i": "npm run r && npm i --prefix main && npm i --prefix noti && npm i",
     
-    "rconfig": "electron delete.js",
+    "rconfig": "node helpers/delete.js",
     "r": "rimraf main/node_modules noti/node_modules node_modules",
 
     "dev": "concurrently \"node main/setVer.js && npm start --prefix main\" \"npm start --prefix noti\" \"cross-env NODE_ENV=development electronmon .\"",

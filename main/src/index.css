@@ -44,3 +44,14 @@ div {
         inset -3px -3px 5px #ffffff;
     @apply shadow-secondery
 }
+
+.drag-region {
+    -webkit-app-region: drag;
+}
+
+button,
+select,
+input,
+textarea,label {
+    -webkit-app-region: no-drag;
+}

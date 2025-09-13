@@ -6,8 +6,9 @@ export default function Header() {
     const [ENV, setEnv] = useState();
     useEffect(() => {
         window.Electron && window.Electron.setupMainEnv()
-            .then((result) => setEnv(result));
+            .then((res) => setEnv(res));
     }, []);
+
     return <header className="flex justify-between items-center rounded-2xl">
         <div className="flex items-center rounded-2xl">
             <img className="w-5 h-5" rel="icon" src="favicon.ico" alt="" />

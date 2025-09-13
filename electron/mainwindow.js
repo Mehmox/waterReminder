@@ -1,11 +1,11 @@
 const { BrowserWindow } = require('electron');
 const path = require('path');
 
-function createWindow(ENV) {
+function createWindow(ENV, width, height) {
 
     const windowOptions = {
-        width: 450,
-        height: 540,
+        width,
+        height,
         icon: path.join(__dirname, "assets", "water_drop.ico"),
         alwaysOnTop: false,
         webPreferences: {
@@ -18,22 +18,23 @@ function createWindow(ENV) {
         resizable: false,
         frame: false,
         show: false,
+        maximizable: false,
     }
 
     switch (ENV) {
         case "development":
-            windowOptions.width += 252;//to devTools
+            // windowOptions.width += 252;//to devTools
             windowOptions.height += 57;//to avoid window frame pixels
-            windowOptions.resizable = true;
+            windowOptions.resizable = false;
             windowOptions.frame = true;
             windowOptions.transparent = false;
             windowOptions.show = true;
             break;
         case "test":
             windowOptions.height += 57;//to avoid window frame pixels
-            windowOptions.resizable = true;
-            windowOptions.frame = true;
-            windowOptions.transparent = false;
+            windowOptions.resizable = false;
+            windowOptions.frame = false;
+            windowOptions.transparent = true;
             windowOptions.show = true;
             break;
         default:
