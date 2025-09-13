@@ -3,6 +3,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('Electron', {
     setupMainConfig: () => ipcRenderer.invoke("setup-main-config"),
     setupMainCounter: () => ipcRenderer.invoke("setup-main-counter"),
+    setupMainEnv: () => ipcRenderer.invoke("setup-main-env"),
     setupNotiConfig: () => ipcRenderer.invoke("setup-noti-config"),
 
     closeSettings: () => ipcRenderer.send("hide-settings"),

@@ -46,7 +46,7 @@ function createWindow(ENV) {
 
     switch (ENV) {
         case "development":
-            // mainwindow.webContents.openDevTools();
+            mainwindow.webContents.openDevTools();
             mainwindow.loadURL("http://localhost:3000");
             break;
         case "test":

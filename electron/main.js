@@ -52,6 +52,7 @@ app.whenReady().then(() => {
 
   ipcMain.handleOnce("setup-main-config", () => config);
   ipcMain.handleOnce("setup-main-counter", () => parseInt(fs.readFileSync(counter_path, "utf-8")));
+  ipcMain.handleOnce("setup-main-env", () => ENV);
   ipcMain.handleOnce("setup-noti-config", () => config);
 
   ipcMain.on("hide-settings", () => mainwindow.hide());
