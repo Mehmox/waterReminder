@@ -48,7 +48,7 @@ app.whenReady().then(() => {
   mainwindow.showInactive();
 
   //listeners          
-  tray.on("click", () => mainwindow.showInactive());
+  tray.on("click", () => mainwindow.show());
 
   ipcMain.handleOnce("setup-main-config", () => config);
   ipcMain.handleOnce("setup-main-counter", () => parseInt(fs.readFileSync(counter_path, "utf-8")));
