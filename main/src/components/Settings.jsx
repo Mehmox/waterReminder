@@ -7,7 +7,7 @@ export default function Settings() {
     const clickSound = new Audio(`assets/click_sound.mp3`);
     const notiSound = new Audio(`assets/noti_sound.mp3`);
     clickSound.volume = 0.2;
-    notiSound.volume = 0.5;
+    notiSound.volume = 0.4;
 
     const refs = {
         noti_alwaysOnTop: useRef(),

@@ -20,7 +20,7 @@ function createNotification(ENV, primaryWidth, primaryHeight) {
         resizable: false,
         frame: false,
         show: false,
-        maximizable: false,
+        maximizable: true,
     }
 
     switch (ENV) {
