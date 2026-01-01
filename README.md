@@ -14,9 +14,22 @@
 
 ## Teknolojiler
 
-- Frontend/Backend: Electron, React, HTML, CSS, JavaScript  
-- Bildirim sistemi: Electron Notification API  
-- Ses yönetimi: Audio API
+## Teknolojiler
+
+- **Electron** – Windows için masaüstü uygulama geliştirme altyapısı  
+- **React** – Kullanıcı arayüzü geliştirme  
+- **JavaScript** – Uygulama mantığı ve iş akışları  
+- **HTML & CSS** – Arayüz yapısı ve stiller  
+- **Tailwind CSS** – Hızlı ve düzenli stil yönetimi  
+
+- **Electron Notification API** – Sistem bildirimleri  
+- **Web Audio API** – Bildirim ve etkileşim sesleri  
+
+- **winreg** – Windows Registry ile etkileşim  
+
+- **react-scripts** – React build ve geliştirme altyapısı  
+- **electron-builder** – Uygulamanın dağıtılabilir `.exe` olarak paketlenmesi
+
 
 ## Kurulum
 

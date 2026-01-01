@@ -15,7 +15,6 @@ export default function Settings() {
         noti_cup: useRef(),
         noti_cooldown: useRef(),
         noti_timeType: useRef(),
-        noti_message: useRef(),
     }
 
     const [config, setConfig] = useState(null);
@@ -28,8 +27,7 @@ export default function Settings() {
             limit: +refs.noti_limit.current.value,
             cup: refs.noti_cup.current.value,
             cooldown: +refs.noti_cooldown.current.value,
-            timeType: +refs.noti_timeType.current.value,
-            message: refs.noti_message.current.value
+            timeType: +refs.noti_timeType.current.value
         }
     }
 
@@ -38,9 +36,9 @@ export default function Settings() {
             setTime((pre) => {
                 const time = refs.noti_cooldown.current.value * refs.noti_timeType.current.value
 
-                if (pre.time === time) return { time: pre.time, toggle: !pre.toggle }
+                if (pre.time === time) return { time: pre.time, toggle: !pre.toggle };
 
-                return { time, toggle: pre.toggle }
+                return { time, toggle: pre.toggle };
             });
         }
 
@@ -48,10 +46,10 @@ export default function Settings() {
 
     useEffect(() => {
         window.Electron && window.Electron.setupMainConfig()
-            .then((config) => setConfig(config));
+            .then(config => setConfig(config));
 
         window.Electron && window.Electron.setupMainCounter()
-            .then((counter) => setCounter(counter));
+            .then(counter => setCounter(counter));
 
         window.Electron && window.Electron.changeCounter((value) => setCounter(value));
     }, [])
@@ -63,7 +61,7 @@ export default function Settings() {
 
         const config = getObjet();
 
-        setConfig(config)
+        setConfig(config);
 
         window.Electron && window.Electron.saveConfig(config);
 
@@ -74,15 +72,15 @@ export default function Settings() {
         clickSound.play();
 
         setCounter(pre => {
-            console.log(pre + action)
-            console.log(config.limit)
-            if (pre + action <= config.limit && pre + action >= 0) {
-                window.Electron && window.Electron.saveCounter(pre + action);
-                return pre + action
-            } else {
-                window.Electron && window.Electron.saveCounter(pre);
-                return pre
+            let num = pre;
+
+            if (num + action <= config.limit && num + action >= 0) {
+                num += action;
             }
+            
+            window.Electron && window.Electron.saveCounter(num);
+
+            return num;
         });
     }
 
@@ -139,17 +137,6 @@ export default function Settings() {
                 <option value={60000 * 60}>{format("hour")}.</option>
             </select>}
             defaultValue={config && config.cooldown}
-        />
-
-        <div className="p text-secondery">Make a custom message to display on notification</div>
-
-        <textarea className="resize-none bg-white border-2 border-black text-secondery"
-            onChange={SaveConfig}
-            maxLength={40}
-            rows={1}
-            spellCheck="false"
-            ref={refs.noti_message}
-            defaultValue={config && config.message}
         />
 
         <Counter config={config} counter={counter} _SetCounter={_SetCounter} _ResetCounter={_ResetCounter} />

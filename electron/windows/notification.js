@@ -3,7 +3,7 @@ const path = require('path');
 
 const width = 400, height = 250;
 
-function createNotification(ENV, primaryWidth, primaryHeight) {
+module.exports = function createNotification(ENV, primaryWidth, primaryHeight) {
 
     const windowOptions = {
         width,
@@ -14,23 +14,21 @@ function createNotification(ENV, primaryWidth, primaryHeight) {
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
-            preload: path.join(__dirname, 'preload.js'),
+            preload: path.join(__dirname, 'notificationpreload.js'),
         },
-        transparent: true,
         resizable: false,
         frame: false,
         show: false,
-        maximizable: true,
+        maximizable: false,
     }
 
     switch (ENV) {
         case "development":
             windowOptions.resizable = true;
             windowOptions.frame = false;
-            windowOptions.transparent = false;
-            windowOptions.height += 200;
             windowOptions.x = 15;
-            windowOptions.y = primaryDisplay.workAreaSize.height - windowOptions.height - 15;
+            windowOptions.height += 200;//to see the console outputs
+            windowOptions.y = primaryHeight - windowOptions.height - 15;//to adapt extra height
         case "test":
             // windowOptions.show = true;
             break;
@@ -42,17 +40,15 @@ function createNotification(ENV, primaryWidth, primaryHeight) {
 
     switch (ENV) {
         case "development":
-            // notification.webContents.openDevTools();
+            notification.webContents.openDevTools();
             notification.loadURL("http://localhost:3005");
             break;
         case "test":
         // notification.webContents.openDevTools();
         case "production":
-            notification.loadFile(path.join(__dirname, '../builds/noti/index.html'));
+            notification.loadFile(path.join(__dirname, '../../builds/noti/index.html'));
             break;
     }
 
     return notification;
 }
-
-module.exports = createNotification;

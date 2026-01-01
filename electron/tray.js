@@ -1,7 +1,7 @@
 const { Tray, Menu } = require('electron');
 const path = require('path');
 
-function createTray(ENV) {
+module.exports = function createTray(ENV) {
 
   const tray = new Tray(path.join(__dirname, "assets", ENV === "production" ? "water_drop.ico" : "settings.ico"));
 
@@ -13,6 +13,5 @@ function createTray(ENV) {
 
   tray.setContextMenu(contextMenu);
 
-  return tray
+  return tray;
 }
-module.exports = createTray

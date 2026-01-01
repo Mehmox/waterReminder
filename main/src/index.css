@@ -24,10 +24,6 @@ body * {
     -webkit-appearance: none;
 }
 
-div {
-    @apply rounded-2xl
-}
-
 .number {
     @apply w-5
 }
@@ -52,6 +48,7 @@ div {
 button,
 select,
 input,
-textarea,label {
+textarea,
+label {
     -webkit-app-region: no-drag;
 }

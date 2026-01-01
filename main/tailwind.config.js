@@ -8,7 +8,7 @@ module.exports = {
       colors: {
         primary: {
           DEFAULT: "#D0F0FF",
-          hover: "#AEEFFF"
+          hover: "#7de5ff"
         },
         secondery:{
           DEFAULT: "#034efc",

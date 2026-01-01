@@ -1,20 +1,21 @@
 const { BrowserWindow } = require('electron');
 const path = require('path');
 
-function createWindow(ENV, width, height) {
+const width = 450, height = 500;
+
+module.exports = function createWindow(ENV) {
 
     const windowOptions = {
         width,
         height,
-        icon: path.join(__dirname, "assets", "water_drop.ico"),
+        icon: path.join(__dirname, "../assets", "water_drop.ico"),
         alwaysOnTop: false,
         webPreferences: {
-            nodeIntegration: true,
+            nodeIntegration: false,
             contextIsolation: true,
             backgroundThrottling: false,
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(__dirname, 'mainpreload.js')
         },
-        transparent: true,
         resizable: false,
         frame: false,
         show: false,
@@ -27,14 +28,11 @@ function createWindow(ENV, width, height) {
             windowOptions.height += 57;//to avoid window frame pixels
             windowOptions.resizable = false;
             windowOptions.frame = true;
-            windowOptions.transparent = false;
             windowOptions.show = true;
             break;
         case "test":
-            windowOptions.height += 57;//to avoid window frame pixels
             windowOptions.resizable = false;
             windowOptions.frame = false;
-            windowOptions.transparent = true;
             windowOptions.show = true;
             break;
         default:
@@ -43,7 +41,7 @@ function createWindow(ENV, width, height) {
 
     const mainwindow = new BrowserWindow(windowOptions);
 
-    mainwindow.setOverlayIcon(path.join(__dirname, "assets", "settings.ico"), "development");
+    mainwindow.setOverlayIcon(path.join(__dirname, "../assets", "settings.ico"), "development");
 
     switch (ENV) {
         case "development":
@@ -51,13 +49,11 @@ function createWindow(ENV, width, height) {
             mainwindow.loadURL("http://localhost:3000");
             break;
         case "test":
-        // mainwindow.webContents.openDevTools();
+        mainwindow.webContents.openDevTools();
         case "production":
-            mainwindow.loadFile(path.join(__dirname, '../builds/main/index.html'));
+            mainwindow.loadFile(path.join(__dirname, '../../builds/main/index.html'));
             break;
     }
 
     return mainwindow;
 }
-
-module.exports = createWindow;

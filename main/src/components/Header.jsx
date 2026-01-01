@@ -9,12 +9,12 @@ export default function Header() {
             .then((res) => setEnv(res));
     }, []);
 
-    return <header className="flex justify-between items-center rounded-2xl">
-        <div className="flex items-center rounded-2xl">
+    return <header className="flex justify-between items-center">
+        <div className="flex items-center">
             <img className="w-5 h-5" rel="icon" src="favicon.ico" alt="" />
             <h2 className="ml-1">Settings <span className="text-black text-sm">v{version}{ENV && ENV[0]}</span></h2>
         </div>
-        {window.Electron && <button className="w-12 h-full bg-primary text-4xl hover:bg-primary-hover text-center border-0 rounded-2xl"
+        {window.Electron && <button className="w-12 h-full bg-primary text-4xl hover:bg-primary-hover text-center border-0"
             onClick={window.Electron.closeSettings}>-</button>}
     </header>
 }
