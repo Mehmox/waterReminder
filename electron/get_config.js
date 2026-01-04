@@ -1,8 +1,6 @@
 const winreg = require("winreg");
 const fs = require("fs");
 
-const get_app_info = require("./get_app_info");
-
 const mainWidth = 450, mainHeight = 540;
 
 module.exports = function get_config(app, counter_path, config_path, workAreaSize) {
@@ -34,7 +32,6 @@ module.exports = function get_config(app, counter_path, config_path, workAreaSiz
             regKey.set('Water-Reminder', winreg.REG_SZ, `"${Logs.getPath}"`, (err) => {
                 if (err) Logs.regedit = err.message || "error";
                 else Logs.regedit = "success";
-                get_app_info();
             });
         }
     }

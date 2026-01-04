@@ -14,7 +14,7 @@ module.exports = function createNotification(ENV, primaryWidth, primaryHeight) {
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
-            preload: path.join(__dirname, 'notificationpreload.js'),
+            preload: path.join(__dirname, '../preloads', 'notificationpreload.js'),
         },
         resizable: false,
         frame: false,
@@ -26,7 +26,7 @@ module.exports = function createNotification(ENV, primaryWidth, primaryHeight) {
         case "development":
             windowOptions.resizable = true;
             windowOptions.frame = false;
-            windowOptions.x = 15;
+            // windowOptions.x = 15;
             windowOptions.height += 200;//to see the console outputs
             windowOptions.y = primaryHeight - windowOptions.height - 15;//to adapt extra height
         case "test":

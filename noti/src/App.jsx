@@ -3,6 +3,11 @@ import { useEffect, useState } from "react";
 export default function App() {
     const [config, setConfig] = useState();
     const [counter, setCounter] = useState();
+    if (config) {
+        console.log("config: " + config.limit)
+        console.log("counter: " + counter)
+        console.log("left: " + (config.limit - counter))
+    }
 
     function handleclose() {
         setCounter(pre => {
@@ -18,7 +23,8 @@ export default function App() {
         window.Electron && window.Electron.setupNotiCounter()
             .then(counter => setCounter(counter));
 
-        window.Electron.changeConfig((config) => setConfig(config));
+        window.Electron.changeConfig(config => setConfig(config));
+        window.Electron.changeCounter(counter => setCounter(counter));
     }, []);
 
     return <section className="w-screen h-screen flex flex-col border-r-2 bg-primary relative">
@@ -38,7 +44,7 @@ export default function App() {
 
             <h2 className="text-2xl text-secondery">Drink {config && config.cup} cup of water</h2>
 
-            <h2 className="text-2xl text-secondery">{(config && counter) && (config.limit - counter)} cup left</h2>
+            <h2 className="text-2xl text-secondery">{(config && Number.isFinite(counter)) && (config.limit - counter)} cup left</h2>
         </div>
     </section>
 }

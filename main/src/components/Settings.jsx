@@ -34,7 +34,7 @@ export default function Settings() {
     function itShouldWork() {
         if (refs.noti_cooldown.current) {
             setTime((pre) => {
-                const time = refs.noti_cooldown.current.value * refs.noti_timeType.current.value
+                const time = refs.noti_cooldown.current.value * refs.noti_timeType.current.value;
 
                 if (pre.time === time) return { time: pre.time, toggle: !pre.toggle };
 
@@ -72,16 +72,16 @@ export default function Settings() {
         clickSound.play();
 
         setCounter(pre => {
-            let num = pre;
-
-            if (num + action <= config.limit && num + action >= 0) {
-                num += action;
+            if (pre + action <= config.limit && pre + action >= 0) {
+                pre += action;
             }
-            
-            window.Electron && window.Electron.saveCounter(num);
 
-            return num;
+            window.Electron && window.Electron.saveCounter(pre);
+
+            return pre;
         });
+
+        itShouldWork();
     }
 
     function _ResetCounter() {
@@ -90,6 +90,8 @@ export default function Settings() {
         setCounter(0);
 
         window.Electron && window.Electron.saveCounter(0);
+
+        itShouldWork();
     }
 
     function format(time) {

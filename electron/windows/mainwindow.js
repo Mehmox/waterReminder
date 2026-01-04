@@ -1,7 +1,7 @@
 const { BrowserWindow } = require('electron');
 const path = require('path');
 
-const width = 450, height = 500;
+const width = 400, height = 500;
 
 module.exports = function createWindow(ENV) {
 
@@ -14,7 +14,7 @@ module.exports = function createWindow(ENV) {
             nodeIntegration: false,
             contextIsolation: true,
             backgroundThrottling: false,
-            preload: path.join(__dirname, 'mainpreload.js')
+            preload: path.join(__dirname, '../preloads', 'mainpreload.js')
         },
         resizable: false,
         frame: false,
@@ -24,7 +24,7 @@ module.exports = function createWindow(ENV) {
 
     switch (ENV) {
         case "development":
-            // windowOptions.width += 252;//to devTools
+            // windowOptions.width += 252;//to devTools 
             windowOptions.height += 57;//to avoid window frame pixels
             windowOptions.resizable = false;
             windowOptions.frame = true;
@@ -45,11 +45,11 @@ module.exports = function createWindow(ENV) {
 
     switch (ENV) {
         case "development":
-            mainwindow.webContents.openDevTools();
+            // mainwindow.webContents.openDevTools();
             mainwindow.loadURL("http://localhost:3000");
             break;
         case "test":
-        mainwindow.webContents.openDevTools();
+        // mainwindow.webContents.openDevTools();
         case "production":
             mainwindow.loadFile(path.join(__dirname, '../../builds/main/index.html'));
             break;

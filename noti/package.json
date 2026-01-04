@@ -5,7 +5,8 @@
   "dependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "water-reminder": "file:.."
   },
   "devDependencies": {
     "cross-env": "^1.0.2",
