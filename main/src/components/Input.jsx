@@ -7,14 +7,14 @@ export default function Input({ messageStart, ref, messageEnd, special, save, ..
             target.current.value = +target.current.value + action
     }
 
-    const input = <input className="text-center underline w-7"
+    const input = <input className="text-center underline w-7 rounded-2xl"
         onChange={(e) => {
             if (e.type === "number") {
                 let value = +e.target.value;
                 if (value > 99) e.target.value = 99;
                 if (value < 0 || value === undefined) e.target.value = 0;
             }
-
+ 
             if (save) save();
         }}
         placeholder="X"

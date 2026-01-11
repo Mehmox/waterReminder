@@ -1,20 +1,19 @@
-
 /* From Uiverse.io by shreyasm-dev */
 /* Hide the default checkbox */
 .container input {
     position: absolute;
     opacity: 0;
     cursor: pointer;
-    height: 0;
-    width: 0;
+    height: 100%;
+    width: 100%;
 }
 
 .container {
     display: inline-block;
     position: relative;
     cursor: pointer;
-    width: 16px !important;
-    height: 18px !important;
+    width: 1.3em !important;
+    height: 1.3em !important;
     font-size: 20px;
     user-select: none;
 }
@@ -57,5 +56,5 @@
     border: solid darkgray;
     border-width: 0 0.15em 0.15em 0;
     transform: rotate(45deg);
-    @apply border-secondery
+    @apply border-secondery;
 }

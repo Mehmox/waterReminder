@@ -3,11 +3,6 @@ import { useEffect, useState } from "react";
 export default function App() {
     const [config, setConfig] = useState();
     const [counter, setCounter] = useState();
-    if (config) {
-        console.log("config: " + config.limit)
-        console.log("counter: " + counter)
-        console.log("left: " + (config.limit - counter))
-    }
 
     function handleclose() {
         setCounter(pre => {

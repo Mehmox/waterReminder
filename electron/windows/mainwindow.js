@@ -26,12 +26,13 @@ module.exports = function createWindow(ENV) {
         case "development":
             // windowOptions.width += 252;//to devTools 
             windowOptions.height += 57;//to avoid window frame pixels
-            windowOptions.resizable = false;
-            windowOptions.frame = true;
+            windowOptions.width += 400;
+            windowOptions.resizable = true;
+            windowOptions.frame = false;
             windowOptions.show = true;
             break;
         case "test":
-            windowOptions.resizable = false;
+            windowOptions.resizable = true;
             windowOptions.frame = false;
             windowOptions.show = true;
             break;
@@ -45,7 +46,7 @@ module.exports = function createWindow(ENV) {
 
     switch (ENV) {
         case "development":
-            // mainwindow.webContents.openDevTools();
+            mainwindow.webContents.openDevTools();
             mainwindow.loadURL("http://localhost:3000");
             break;
         case "test":
